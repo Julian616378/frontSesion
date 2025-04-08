@@ -284,6 +284,7 @@ a{
 }
 
     </style>
+
     <header class="main-header">
         <div class="logo-container">
             <a href="{{ url('/home') }}"><img href="/inicio-de-sesion/Modulo-iniciar-sesion/home/home.html" src="{{ asset('css/inicioSesion/img/logo.png') }}"alt="Logo" class="logo"></a>
@@ -304,12 +305,15 @@ a{
         </div>
         <div class="profile-container">
             <div class="profile-box">
-                <a href="#nombre" class="nav-item special-item profile-name">Jhon Sebastian</a>
+                <!-- aqui debe estar el nombre del usuario -->
+                <a id="profile-name" href="#nombre" class="nav-item special-item profile-name">Invitado</a>
+
                 <img src="/mapa-de-suenos/imagenes/459571723_4109978595954978_2480821301631162862_n.jpg" alt="Foto de perfil" class="profile-pic" onclick="toggleProfileMenu()">
                 <div id="profile-menu" class="profile-menu">
                     <a href="{{ url('/usuario') }}">Perfil</a>
-                    <a href="{{ url('/confi') }}">Configuracion</a>
-                    <a href="{{ url('/login') }}">Cerrar sesión</a>
+                    <a href="{{ url('/confi') }}">Configuracion</a> 
+                     <!-- dale funcionalidad a cerrar sesion  -->
+                     <a href="#" id="boton-sesion">Cerrar sesión</a>
                 </div>
             </div>
         </div>
@@ -342,32 +346,78 @@ a{
       
     <script>
         function toggleProfileMenu() {
-    const menu = document.getElementById("profile-menu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
-  }
-  
-  function toggleModules() {
-    const overlay = document.getElementById("modules-overlay");
-    overlay.style.display = overlay.style.display === "block" ? "none" : "block";
-  }
-  
-  document.addEventListener("click", function (e) {
-    if (!e.target.closest(".profile-container")) {
-      document.getElementById("profile-menu").style.display = "none";
-    }
-    if (!e.target.closest(".modules-item")) {
-      document.getElementById("modules-overlay").style.display = "none";
-    }
-  });
-  function toggleHamburgerMenu() {
-    const hamburgerMenu = document.getElementById('hamburger-menu');
-    hamburgerMenu.classList.toggle('active'); // Alterna la clase 'active' para mostrar/ocultar
-}
-function toggleModulues() {
-    const modulesContent = document.getElementById("modules-content");
-    modulesContent.style.display = modulesContent.style.display === "block" ? "none" : "block";
-}
-
-    </script>
+          const menu = document.getElementById("profile-menu");
+          menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+      
+        function toggleModules() {
+          const overlay = document.getElementById("modules-overlay");
+          overlay.style.display = overlay.style.display === "block" ? "none" : "block";
+        }
+      
+        function toggleHamburgerMenu() {
+          const hamburgerMenu = document.getElementById('hamburger-menu');
+          hamburgerMenu.classList.toggle('active');
+        }
+      
+        function toggleModulues() {
+          const modulesContent = document.getElementById("modules-content");
+          modulesContent.style.display = modulesContent.style.display === "block" ? "none" : "block";
+        }
+      
+        // Ocultar menús al hacer clic fuera
+        document.addEventListener("click", function (e) {
+          if (!e.target.closest(".profile-container")) {
+            document.getElementById("profile-menu").style.display = "none";
+          }
+          if (!e.target.closest(".modules-item")) {
+            document.getElementById("modules-overlay").style.display = "none";
+          }
+        });
+      
+        // Cuando carga el DOM
+        document.addEventListener('DOMContentLoaded', () => {
+          const userData = localStorage.getItem('userData');
+          const profileName = document.getElementById('profile-name');
+          const botonSesion = document.getElementById('boton-sesion'); // Usa este ID en el HTML
+      
+          if (userData && profileName && botonSesion) {
+            try {
+              const usuario = JSON.parse(userData);
+              profileName.textContent = usuario.nombre || 'Invitado';
+      
+              // Mostrar "Cerrar sesión" si hay datos de usuario
+              botonSesion.textContent = 'Cerrar sesión';
+              botonSesion.onclick = function (e) {
+                e.preventDefault();
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                window.location.href = "{{ url('/inicioSesion/home') }}";
+              };
+            } catch (error) {
+              console.error('Error al parsear userData:', error);
+              mostrarIniciarSesion();
+            }
+          } else {
+            mostrarIniciarSesion();
+          }
+      
+          function mostrarIniciarSesion() {
+            const profileName = document.getElementById('profile-name');
+            const botonSesion = document.getElementById('boton-sesion');
+            // <- este es el ID correcto
+            
+            if (profileName) profileName.textContent = 'Invitado';
+            if (botonSesion) {
+              botonSesion.textContent = 'Iniciar sesión';
+              botonSesion.onclick = function (e) {
+                e.preventDefault();
+                window.location.href = "{{ url('/login') }}";
+              };
+            }
+          }
+        });
+      </script>
+      
 </body>
 </html>
