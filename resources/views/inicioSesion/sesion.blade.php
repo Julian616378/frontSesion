@@ -322,7 +322,9 @@
         </div>
     </div>
 
+
     <script>
+         const homeUrl = "{{ url('/inicioSesion/home') }}";
       document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -360,7 +362,7 @@
             }));
             
             // Redirigir a la vista home
-            window.location.href ="{{ url('/inicioSesion/home') }}";
+            window.location.href =homeUrl ;
         } else {
             throw new Error(response.data.message || 'Error inesperado');
         }

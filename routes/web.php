@@ -43,3 +43,7 @@ Route::get('/login', function () {
 Route::get('/inicioSesion/home', function () {
     return view('inicioSesion.home');
 })->name('home');
+
+Route::get('/tips/{id}', function ($id) {
+    return view('inicioSesion.tips', ['tipId' => $id]);
+});
