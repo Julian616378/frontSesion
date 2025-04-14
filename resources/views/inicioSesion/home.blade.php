@@ -82,9 +82,9 @@
         }
         
         .pagination button.active {
-            background: #3498db;
+            background: #59009A;
             color: white;
-            border-color: #3498db;
+            border-color: #59009A;
         }
         
         .pagination button:hover:not(.active) {
@@ -95,7 +95,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: #3498db;
+            background: #59009A;
             color: white;
             width: 40px;
             height: 40px;
@@ -336,7 +336,9 @@
 
         // Función para redirigir a la vista de detalle
         function viewTipDetail(tipId) {
-            window.location.href = `http://localhost:8000/tips/${tipId}`;
+            const baseUrl = '{{ url("/tips") }}';
+    // Y luego concatena el ID con JavaScript
+    window.location.href = `${baseUrl}/${tipId}`;
 }
 
         // Función para actualizar la paginación
